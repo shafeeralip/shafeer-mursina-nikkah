@@ -443,14 +443,302 @@
     font-size:2.2rem;
     color:var(--rose-deep);
   }
+
+
+  /* ---------- Elegant tap-to-open screen ---------- */
+  #welcome-screen{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(217,169,160,.16), transparent 34%),
+      radial-gradient(circle at 85% 80%, rgba(201,161,119,.14), transparent 32%),
+      linear-gradient(180deg, #fffdfb 0%, #fff8f5 100%);
+    transition:opacity .7s ease, visibility .7s ease;
+  }
+
+  #welcome-screen::before,
+  #welcome-screen::after{
+    content:"";
+    position:absolute;
+    width:220px;
+    height:220px;
+    border:1px solid rgba(217,169,160,.32);
+    border-radius:50%;
+  }
+
+  #welcome-screen::before{
+    top:-110px;
+    left:-90px;
+  }
+
+  #welcome-screen::after{
+    right:-100px;
+    bottom:-120px;
+  }
+
+  #welcome-screen.is-hidden{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+  }
+
+  .welcome-petal{
+    position:absolute;
+    width:10px;
+    height:16px;
+    border-radius:70% 30% 70% 30%;
+    background:linear-gradient(145deg, #f2cfc8, #d9a9a0);
+    opacity:.45;
+    animation:welcomeFloat 7s ease-in-out infinite;
+  }
+
+  .welcome-petal.p1{ top:12%; left:12%; animation-delay:0s; }
+  .welcome-petal.p2{ top:18%; right:14%; animation-delay:1.2s; transform:rotate(35deg); }
+  .welcome-petal.p3{ bottom:16%; left:18%; animation-delay:2.3s; transform:rotate(65deg); }
+  .welcome-petal.p4{ bottom:12%; right:18%; animation-delay:3.1s; transform:rotate(90deg); }
+
+  @keyframes welcomeFloat{
+    0%,100%{ transform:translateY(0) rotate(0deg); }
+    50%{ transform:translateY(-14px) rotate(18deg); }
+  }
+
+  .welcome-card{
+    position:relative;
+    width:min(440px, 92vw);
+    padding:3.2rem 2rem 2.5rem;
+    text-align:center;
+    background:rgba(255,255,255,.82);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border:1px solid rgba(217,169,160,.4);
+    border-radius:28px 28px 14px 14px;
+    box-shadow:
+      0 30px 70px rgba(96,67,58,.12),
+      inset 0 0 0 1px rgba(255,255,255,.7);
+    overflow:hidden;
+  }
+
+  .welcome-card::before{
+    content:"";
+    position:absolute;
+    inset:14px;
+    border:1px solid rgba(201,161,119,.32);
+    border-radius:22px 22px 10px 10px;
+    pointer-events:none;
+  }
+
+  .welcome-card::after{
+    content:"✦";
+    position:absolute;
+    top:18px;
+    left:50%;
+    transform:translateX(-50%);
+    color:var(--gold);
+    font-size:.9rem;
+    background:#fffdfb;
+    padding:0 .55rem;
+  }
+
+  .welcome-bismillah{
+    position:relative;
+    z-index:1;
+    font-family:'Amiri', serif;
+    color:var(--rose-deep);
+    font-size:1.45rem;
+    margin-bottom:.75rem;
+  }
+
+  .welcome-kicker{
+    position:relative;
+    z-index:1;
+    font-size:.68rem;
+    letter-spacing:.32em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:1.4rem;
+  }
+
+  .welcome-title{
+    position:relative;
+    z-index:1;
+    font-family:'Tangerine', cursive;
+    font-size:clamp(3.3rem, 12vw, 4.7rem);
+    line-height:.95;
+    font-weight:700;
+    color:var(--ink);
+    margin-bottom:.65rem;
+  }
+
+  .welcome-amp{
+    display:block;
+    font-family:'Cormorant Garamond', serif;
+    font-size:1.2rem;
+    font-style:italic;
+    color:var(--rose-deep);
+    margin:.15rem 0;
+  }
+
+  .welcome-date{
+    position:relative;
+    z-index:1;
+    font-family:'Cormorant Garamond', serif;
+    font-size:1rem;
+    letter-spacing:.12em;
+    color:var(--ink-soft);
+    margin-bottom:1.6rem;
+  }
+
+  .welcome-divider{
+    position:relative;
+    z-index:1;
+    width:96px;
+    height:1px;
+    margin:0 auto 1.5rem;
+    background:linear-gradient(90deg, transparent, var(--rose), transparent);
+  }
+
+  .welcome-sub{
+    position:relative;
+    z-index:1;
+    color:var(--ink-soft);
+    font-size:.86rem;
+    line-height:1.7;
+    margin-bottom:1.6rem;
+  }
+
+  #open-invitation{
+    position:relative;
+    z-index:1;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.65rem;
+    min-width:220px;
+    border:1px solid var(--rose-deep);
+    border-radius:999px;
+    background:linear-gradient(135deg, #c78e84, #b97d74);
+    color:#fff;
+    padding:1rem 1.55rem;
+    font-family:'Jost', sans-serif;
+    font-size:.76rem;
+    font-weight:500;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    cursor:pointer;
+    box-shadow:0 12px 24px rgba(185,125,116,.24);
+    transition:transform .25s ease, box-shadow .25s ease, filter .25s ease;
+  }
+
+  #open-invitation:hover{
+    transform:translateY(-2px);
+    box-shadow:0 16px 30px rgba(185,125,116,.3);
+    filter:brightness(1.03);
+  }
+
+  #open-invitation:active{
+    transform:translateY(0);
+  }
+
+  #open-invitation:disabled{
+    opacity:.75;
+    cursor:wait;
+  }
+
+  .music-note{
+    font-size:1rem;
+    animation:musicPulse 1.8s ease-in-out infinite;
+  }
+
+  @keyframes musicPulse{
+    0%,100%{ transform:scale(1); }
+    50%{ transform:scale(1.18); }
+  }
+
+  #music-status{
+    position:relative;
+    z-index:1;
+    min-height:1.2rem;
+    margin-top:1rem;
+    font-size:.72rem;
+    color:var(--ink-soft);
+  }
+
+  .welcome-note{
+    position:relative;
+    z-index:1;
+    margin-top:.5rem;
+    font-size:.66rem;
+    letter-spacing:.08em;
+    color:#a3948d;
+  }
+
+  body.is-locked{
+    overflow:hidden;
+  }
+
+  @media (max-width:480px){
+    .welcome-card{
+      padding:2.8rem 1.35rem 2.2rem;
+      border-radius:24px 24px 12px 12px;
+    }
+
+    .welcome-title{
+      font-size:3.7rem;
+    }
+
+    #open-invitation{
+      min-width:205px;
+    }
+  }
+
 </style>
 </head>
-<body>
+<body class="is-locked">
+
+<div id="welcome-screen">
+  <span class="welcome-petal p1"></span>
+  <span class="welcome-petal p2"></span>
+  <span class="welcome-petal p3"></span>
+  <span class="welcome-petal p4"></span>
+
+  <div class="welcome-card">
+    <div class="welcome-bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+    <div class="welcome-kicker">The Nikkah Invitation Of</div>
+
+    <div class="welcome-title">
+      Shafeerali
+      <span class="welcome-amp">&amp;</span>
+      Mursina
+    </div>
+
+    <div class="welcome-date">25 OCTOBER 2026</div>
+    <div class="welcome-divider"></div>
+
+    <div class="welcome-sub">
+      With the blessings of Allah, we warmly invite you to celebrate our special day.
+    </div>
+
+    <button id="open-invitation" type="button">
+      <span class="music-note">♥</span>
+      Open Invitation
+    </button>
+
+    <div id="music-status"></div>
+    <div class="welcome-note">Tap to enter</div>
+  </div>
+</div>
+</div>
 
 <div class="bg-lattice"></div>
 <div class="petals" id="petals"></div>
-<audio id="bg-audio" loop muted playsinline preload="auto">
-  <source src="/videoplayback.webm" type="audio/webm">
+<audio id="bg-audio" loop playsinline preload="auto">
+  <source src="./music.mp3" type="audio/mpeg">
 </audio>
 
 <!-- HERO -->
@@ -644,24 +932,37 @@
   for(let i=0;i<petalCount;i++){ makePetal(); }
 
 
-  // ---------- Background music (auto-plays on load) ----------
+  // ---------- Reliable music start ----------
   const bgAudio = document.getElementById('bg-audio');
-  let hasUnmuted = false;
+  const welcomeScreen = document.getElementById('welcome-screen');
+  const openButton = document.getElementById('open-invitation');
+  const musicStatus = document.getElementById('music-status');
 
-  function startMusic(){
-    bgAudio.play().catch(()=>{ /* will retry on first interaction */ });
-  }
-  startMusic();
+  bgAudio.volume = 0.6;
 
-  function unmuteOnFirstInteraction(){
-    if(hasUnmuted) return;
-    hasUnmuted = true;
-    bgAudio.muted = false;
-    bgAudio.volume = 0.6;
-    bgAudio.play().catch(()=>{});
-  }
-  ['click','touchstart','keydown','scroll'].forEach(evt=>{
-    window.addEventListener(evt, unmuteOnFirstInteraction, {once:true, passive:true});
+  openButton.addEventListener('click', async () => {
+    openButton.disabled = true;
+    musicStatus.textContent = 'Starting music…';
+
+    try {
+      // Must be called directly inside the user click.
+      await bgAudio.play();
+      musicStatus.textContent = '';
+    } catch (error) {
+      console.error('Audio error:', error);
+      musicStatus.textContent = 'Music could not start, but the invitation will open.';
+    }
+
+    document.body.classList.remove('is-locked');
+    welcomeScreen.classList.add('is-hidden');
+
+    setTimeout(() => {
+      welcomeScreen.remove();
+    }, 600);
+  });
+
+  bgAudio.addEventListener('error', () => {
+    musicStatus.textContent = 'music.mp3 was not found. Keep it beside index.html.';
   });
 </script>
 
