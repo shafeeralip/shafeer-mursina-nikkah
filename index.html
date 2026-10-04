@@ -42,12 +42,45 @@ body{background:var(--bg);color:var(--ink);font-family:'Cormorant Garamond',seri
 .pt{position:absolute;top:-30px;animation:fall linear infinite}
 @keyframes fall{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:.85}100%{transform:translateY(112vh) translateX(40px) rotate(360deg);opacity:0}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-</style></head><body>
-  
+body.locked{overflow:hidden;height:100svh}
+#cover{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8vh 8vw;background:var(--bg);transition:opacity .8s ease,visibility .8s;overflow:hidden}
+#cover.hide{opacity:0;visibility:hidden;pointer-events:none}
+.c-ar{font-family:Amiri,serif;color:var(--cr);font-size:clamp(1.6rem,6vw,2.2rem);margin-bottom:.4rem}
+.c-cap{font-size:.75rem;letter-spacing:.32em;text-transform:uppercase;color:var(--mu);font-weight:600;margin-bottom:1.6rem}
+.c-nm{font-style:italic;color:var(--ink);font-size:clamp(2.1rem,9vw,3.1rem);line-height:1.15}
+.c-nm span{display:block;color:var(--co);font-size:clamp(1.3rem,5vw,1.7rem);margin:.15rem 0}
+.c-date{color:var(--mu);font-size:1.05rem;margin:1.1rem 0 2rem;letter-spacing:.06em}
+.open-btn{position:relative;z-index:2;display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 2.2rem;border:1px solid var(--cr);color:var(--cr);background:transparent;font-family:inherit;font-size:.82rem;letter-spacing:.25em;text-transform:uppercase;font-weight:700;cursor:pointer;transition:.35s}
+.open-btn:hover{background:var(--cr);color:#fff}
+.open-btn svg{width:16px;height:16px;fill:currentColor}
+.music-fab{position:fixed;right:18px;bottom:18px;z-index:40;width:52px;height:52px;border-radius:50%;background:var(--bg);border:1.5px solid var(--cr);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 18px rgba(142,26,47,.3);transition:transform .3s}
+.music-fab:hover{transform:translateY(-2px)}
+.music-fab svg{width:20px;height:20px;stroke:var(--cr);fill:none;stroke-width:1.7}
+.music-fab .disc{transform-origin:12px 12px;animation:spinDisc 4.5s linear infinite;animation-play-state:paused}
+.music-fab.playing .disc{animation-play-state:running}
+@keyframes spinDisc{to{transform:rotate(360deg)}}
+</style></head><body class="locked">
 <audio id="bg-audio" loop muted playsinline preload="auto">
   <source src="./music.mp3" type="audio/mpeg">
 </audio>
 <div class="petals" id="petals"></div>
+
+<div id="cover">
+  <svg class="corner tl" viewBox="0 0 400 400"><use href="#cl"/></svg>
+  <svg class="corner br" viewBox="0 0 400 400"><use href="#cl"/></svg>
+  <div class="c-ar">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+  <div class="c-cap">The Nikkah Of</div>
+  <div class="c-nm">Shafeerali<span>&amp;</span>Mursina</div>
+  <div class="c-date">Sunday, 25 October 2026</div>
+  <button class="open-btn" id="openBtn" type="button">
+    <svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1Z"/></svg>
+    Open Invitation
+  </button>
+</div>
+
+<div class="music-fab" id="musicFab" role="button" aria-label="Play music" title="Play music">
+  <svg class="disc" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.3" fill="currentColor"/></svg>
+</div>
 <svg width="0" height="0" style="position:absolute"><defs id="defs">
 <symbol id="ck" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
 <symbol id="pn" viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></symbol>
@@ -123,7 +156,17 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.targ
 document.querySelectorAll('.screen').forEach(s=>s.querySelectorAll('.rv').forEach((e,i)=>{e.style.transitionDelay=i*.12+'s';io.observe(e)}));
 const T=new Date('2026-10-25T10:30:00+05:30').getTime(),g=id=>document.getElementById(id);
 (function k(){const x=Math.max(0,T-Date.now());g('d').textContent=Math.floor(x/864e5);g('h').textContent=String(Math.floor(x/36e5%24)).padStart(2,'0');g('m').textContent=String(Math.floor(x/6e4%60)).padStart(2,'0');g('s').textContent=String(Math.floor(x/1e3%60)).padStart(2,'0');setTimeout(k,1000)})();
-const A=document.getElementById('bg-audio');let u=0;A.play().catch(()=>{});
-const go=()=>{if(u)return;u=1;A.muted=false;A.volume=.6;A.play().catch(()=>{})};
-['click','touchend','pointerup','keydown'].forEach(v=>addEventListener(v,go,{once:true,passive:true}));
+const A=document.getElementById('bg-audio'),fab=document.getElementById('musicFab'),cover=document.getElementById('cover');
+let playing=false;
+function setFab(p){playing=p;fab.classList.toggle('playing',p);fab.setAttribute('aria-label',p?'Pause music':'Play music');fab.title=p?'Pause music':'Play music'}
+function startMusic(){A.muted=false;A.volume=.6;A.play().then(()=>setFab(true)).catch(()=>setFab(false))}
+document.getElementById('openBtn').addEventListener('click',()=>{
+  cover.classList.add('hide');
+  document.body.classList.remove('locked');
+  startMusic();
+  setTimeout(()=>cover.remove(),900);
+});
+fab.addEventListener('click',()=>{
+  if(playing){A.pause();setFab(false)}else{startMusic()}
+});
 </script></body></html>
